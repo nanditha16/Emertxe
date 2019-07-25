@@ -1,7 +1,9 @@
 package com.graph.basics;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
 
@@ -27,12 +29,34 @@ public class GraphAdjacentList {
 		}
 	}
 
+	static class GraphEdges {
+		final int u;
+		final int v;
+	
+		GraphEdges(int u, int v) {
+			this.u = u;
+			this.v = v;
+		}
+		
+	}
+	
+	private static Graph createGraph(int totalNodes, int totalEdges, ArrayList<GraphEdges> edges) {
+		Graph graph = new Graph(totalNodes);
+		
+		for(int i = 0; i < totalEdges; i++) {
+			addEdge(graph, edges.get(i).u, edges.get(i).v);
+		}
+		
+		return graph;
+		
+	}
+	
 	static void addEdge(Graph graph, int src, int dest) {
 		// Add an edge from src to dest.
 		graph.adjListArray[src].add(dest);
 
 		// If graph is undirected
-		// graph.adjListArray[dest].add(src);
+		//graph.adjListArray[dest].add(src);
 
 	}
 
@@ -136,17 +160,29 @@ public class GraphAdjacentList {
 
 	public static void main(String[] args) {
 		// create the graph with 5 nodes
-		int V = 5;
-		Graph graph = new Graph(V);
-		// edges
-		addEdge(graph, 0, 1);
-		addEdge(graph, 0, 4);
-		addEdge(graph, 1, 2);
-		addEdge(graph, 1, 3);
-		addEdge(graph, 1, 4);
-		addEdge(graph, 2, 3);
-		addEdge(graph, 3, 4);
+		
+		int totalNodes = 5;
+		int totalEdges = 5;
+		ArrayList<GraphEdges> edgesArray = new ArrayList<>();
+		edgesArray.add(new GraphEdges(0, 1));
+		edgesArray.add(new GraphEdges(0, 4));
+		edgesArray.add(new GraphEdges(1, 2));
+		edgesArray.add(new GraphEdges(1, 3));
+		edgesArray.add(new GraphEdges(1, 4));
+		edgesArray.add(new GraphEdges(2, 3));
+		edgesArray.add(new GraphEdges(3, 4));
+		//undirected
+		edgesArray.add(new GraphEdges(1, 0));
+		edgesArray.add(new GraphEdges(4, 0));
+		edgesArray.add(new GraphEdges(2, 1));
+		edgesArray.add(new GraphEdges(3, 1));
+		edgesArray.add(new GraphEdges(4, 1));
+		edgesArray.add(new GraphEdges(3, 2));
+		edgesArray.add(new GraphEdges(4, 3));
 
+		
+		Graph graph = createGraph(totalNodes, totalEdges, edgesArray);
+	
 		// print the adjacency list representation of
 		// the above graph
 		printGraph(graph);
@@ -250,10 +286,12 @@ public class GraphAdjacentList {
 		 * 3. Bellman-Ford Algorithm 
 		 * 4. Floyd Warshall Algorithm
 		 */
-		System.out.println("\n  \n KosarajusAlgorithm : \n");
 		System.out.println("Following are strongly connected components " + "in given graph ");
+		System.out.println("\n  \n KosarajusAlgorithm : \n");
 		printSCCsKosarajusAlgorithm();
-
+		
+		System.out.println("\n  \n TarjanAlgorithm : \n");
+		printSCCsTarjanAlgorithm();
 		
 		/*
 		 * Minimum Spanning Tree : 
@@ -278,20 +316,31 @@ public class GraphAdjacentList {
 
 	}
 
+	
 	private static void printSCCsKosarajusAlgorithm() {
-		Graph graph = new Graph(5);
+		int totalNodes = 5;
+		int totalEdges = 5;
+		ArrayList<GraphEdges> edgesArray = new ArrayList<>();
+		edgesArray.add(new GraphEdges(0,2));
+		edgesArray.add(new GraphEdges(1, 0));
+		edgesArray.add(new GraphEdges(2, 1));
+		edgesArray.add(new GraphEdges(0, 3));
+		edgesArray.add(new GraphEdges(3, 4));
+		// undirected
+		edgesArray.add(new GraphEdges(2, 0));
+		edgesArray.add(new GraphEdges(0, 1));
+		edgesArray.add(new GraphEdges(1, 2));
+		edgesArray.add(new GraphEdges(3, 0));
+		edgesArray.add(new GraphEdges(4, 3)); 
+
+		Graph graph = createGraph(totalNodes, totalEdges, edgesArray);
 		
-		addEdge(graph, 1, 0);
-		addEdge(graph, 0, 2);
-		addEdge(graph, 2, 1);
-		addEdge(graph, 0, 3);
-		addEdge(graph, 3, 4);
 		
-		KosarajusAlgorithm printSCC = new KosarajusAlgorithm();
+		StronglyConnectedComponentAlgorithms printSCC = new StronglyConnectedComponentAlgorithms();
 
 		// Step 1:
 		// - create an empty stack S
-		Stack stack = new Stack();
+		Stack<Integer> stack = new Stack<>();
 
 		// - recur DFS(G,src) for adjacent vertices of a vertex
 		// Mark all the vertices as not visited (For first DFS)
@@ -328,4 +377,54 @@ public class GraphAdjacentList {
 
 	}
 
+	private static void printSCCsTarjanAlgorithm() {
+		// Create graph with edges
+		int totalNodes = 8;
+		int totalEdges = 14;
+		ArrayList<GraphEdges> edgesArray = new ArrayList<>();
+		edgesArray.add(new GraphEdges(0,1));
+		edgesArray.add(new GraphEdges(1, 2));
+		edgesArray.add(new GraphEdges(2, 3));
+		edgesArray.add(new GraphEdges(3, 2));
+		edgesArray.add(new GraphEdges(3, 7));
+		edgesArray.add(new GraphEdges(7, 3));
+		edgesArray.add(new GraphEdges(2, 6));
+		edgesArray.add(new GraphEdges(7, 6));
+		edgesArray.add(new GraphEdges(5, 6));
+		edgesArray.add(new GraphEdges(6, 5));
+		edgesArray.add(new GraphEdges(1, 5));
+		edgesArray.add(new GraphEdges(4, 5));
+		edgesArray.add(new GraphEdges(4, 0));
+		edgesArray.add(new GraphEdges(1, 4));
+         
+
+		// Step 1: Initialization
+		Graph graph = createGraph(totalNodes, totalEdges, edgesArray);
+
+		// - create an empty stack S
+		Stack<Integer> stack = new Stack<>();
+
+		// - to Find Low-Link Value of all edges
+		int[] low = new int[graph.totalNode];
+		// preorder number counter
+		int preCount = 0;
+		
+		StronglyConnectedComponentAlgorithms printSCC = new StronglyConnectedComponentAlgorithms();
+
+		// STEP 2: To get SCC 		
+		
+		// - recur DFS(G,src) for adjacent vertices of a vertex
+		// Mark all the vertices as not visited (For DFS)
+		boolean visited[] = new boolean[graph.totalNode];
+
+		// - push the vertex to stack
+		// Fill vertices in stack according to their finishing times 
+		for (int i = 0; i < graph.totalNode; i++) {
+			if (!visited[i]) {
+				printSCC.DFSTarjanAlgoModified(graph, i, visited, stack, low, preCount);	
+			}
+		}
+
+	}
+	
 }
