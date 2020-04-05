@@ -27,9 +27,9 @@ public class SimpleRouteBuilder extends RouteBuilder {
 	
 	private void handleRoutingOnSplitEachLineRouting() {
 		//TODO: To kafka
-		 from("file:/Users/nanditha/eclipse-workspace/CamelExample/src/main/resources/inputFolder?noop=true")
+		 from("file:src/main/resources/inputFolder?noop=true")
 		 .split().tokenize("\n")
-		 .to("file:/Users/nanditha/eclipse-workspace/CamelExample/src/main/resources/outputFolder");		   
+		 .to("file:src/main/resources/outputFolder");		   
 			
 		
 	}
@@ -44,9 +44,9 @@ public class SimpleRouteBuilder extends RouteBuilder {
 		.redeliveryPolicyRef("testRedeliveryPolicyProfile").log("Received body ").handled(true);
 
 		//Route 1
-		from("file:/Users/nanditha/eclipse-workspace/CamelExample/src/main/resources/inputFolder?noop=true")
+		from("file:/src/main/resources/inputFolder?noop=true")
 		.process(new MyProcessor())
-		.to("file:/Users/nanditha/eclipse-workspace/CamelExample/src/main/resources/outputFolder");
+		.to("file:/src/main/resources/outputFolder");
 	
 		
 	}
@@ -59,9 +59,9 @@ public class SimpleRouteBuilder extends RouteBuilder {
         }).redeliveryPolicyRef("testRedeliveryPolicyProfile").log("Received body ").handled(true);
 
 		//Route 1
-		from("file:/Users/nanditha/eclipse-workspace/CamelExample/src/main/resources/inputFolder?noop=true")
+		from("file:/src/main/resources/inputFolder?noop=true")
 		.process(new MyProcessor())
-		.to("file:/Users/nanditha/eclipse-workspace/CamelExample/src/main/resources/outputFolder");
+		.to("file:/src/main/resources/outputFolder");
 	}
 
 	/*
@@ -75,14 +75,14 @@ public class SimpleRouteBuilder extends RouteBuilder {
         }).log("Received body ").handled(true);
 		
 		//Route 1
-		from("file:/Users/nanditha/eclipse-workspace/CamelExample/src/main/resources/inputFolder?noop=true")
+		from("file:/src/main/resources/inputFolder?noop=true")
 		.process(new MyProcessor())
-		.to("file:/Users/nanditha/eclipse-workspace/CamelExample/src/main/resources/outputFolder");
+		.to("file:/src/main/resources/outputFolder");
 
 		//Route 2
-		from("file:/Users/nanditha/eclipse-workspace/CamelExample/src/main/resources/inputFolder2?noop=true")
+		from("file:/src/main/resources/inputFolder2?noop=true")
 		.process(new MyProcessor())
-		.to("file:/Users/nanditha/eclipse-workspace/CamelExample/src/main/resources/outputFolder2");
+		.to("file:/src/main/resources/outputFolder2");
 
 	}
 
@@ -92,10 +92,10 @@ public class SimpleRouteBuilder extends RouteBuilder {
 	 * i.e noop=true" cannot be handled
 	 */
 	private void handleExceptionUsingDoTryProcessRouting() {
-		 from("file:/Users/nanditha/eclipse-workspace/CamelExample/src/main/resources/inputFolder?noop=true")
+		 from("file:/src/main/resources/inputFolder?noop=true")
 		 .doTry()
 		 .process(new MyProcessor())
-		 .to("file:/Users/nanditha/eclipse-workspace/CamelExample/src/main/resources/outputFolder")
+		 .to("file:/src/main/resources/outputFolder")
 		 .doCatch(CamelCustomException.class).process(new Processor() {
 
 			public void process(Exchange exchange) throws Exception {
@@ -107,14 +107,14 @@ public class SimpleRouteBuilder extends RouteBuilder {
 	}
 
 	private void simpleProcessRouting() {
-		 from("file:/Users/nanditha/eclipse-workspace/CamelExample/src/main/resources/inputFolder?noop=true")
+		 from("file:/src/main/resources/inputFolder?noop=true")
 		 .process(new MyProcessor())
-		 .to("file:/Users/nanditha/eclipse-workspace/CamelExample/src/main/resources/outputFolder");		   
+		 .to("file:/src/main/resources/outputFolder");		   
 		
 	}
 
 	private void simpleRouting() {
-	 from("file:/Users/nanditha/eclipse-workspace/CamelExample/src/main/resources/inputFolder?noop=true").to("file:/Users/nanditha/eclipse-workspace/CamelExample/src/main/resources/outputFolder");		   
+	 from("file:/src/main/resources/inputFolder?noop=true").to("file:/src/main/resources/outputFolder");		   
 		
 		
 	}
