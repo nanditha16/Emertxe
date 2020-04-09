@@ -1,0 +1,6 @@
+cat
+bat
+dat
+eat
+fat
+ant

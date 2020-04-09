@@ -21,11 +21,21 @@ public class SimpleRouteBuilder extends RouteBuilder {
 		//handleExceptionusingOnExceptionProcessRouting();
 		//handleRedeliveryPolicyProcessRouting();
 		//handleCorrectionBeforeRedeliveryPolicyProcessRouting();
-		handleRoutingOnSplitEachLineRouting();
+		handleOnSplitEachLineRouting();
+		//TODO: 
+		//handleRoutingFromJetty();
 		
 	}
 	
-	private void handleRoutingOnSplitEachLineRouting() {
+	private void handleRoutingFromJetty() {
+		from("jetty://http://localhost:8080/ping")  
+		.log("Received a request")  
+		.setBody(simple("Hello, world!"));		   
+		
+		
+	}
+
+	private void handleOnSplitEachLineRouting() {
 		//TODO: To kafka
 		 from("file:src/main/resources/inputFolder?noop=true")
 		 .split().tokenize("\n")

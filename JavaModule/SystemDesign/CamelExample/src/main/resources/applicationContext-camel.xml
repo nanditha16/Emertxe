@@ -1,16 +1,58 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camel="http://camel.apache.org/schema/spring"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:camel="http://camel.apache.org/schema/spring"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans.xsd          
 		http://camel.apache.org/schema/spring 
 		http://camel.apache.org/schema/spring/camel-spring.xsd">
 
+	<!-- -->
 	<bean id="routeBuilder" class="route.SimpleRouteBuilder" />
 
-	<camelContext xmlns="http://camel.apache.org/schema/spring">
-		<routeBuilder ref="routeBuilder" />
-		<redeliveryPolicyProfile id="testRedeliveryPolicyProfile"
-			retryAttemptedLogLevel="WARN" maximumRedeliveries="5"
-			redeliveryDelay="5" />
+
+
+	<camelContext
+		xmlns="http://camel.apache.org/schema/spring">
+
+		<route>
+			<from uri="file:src/main/resources/inputFolder?noop=true" />
+			<log
+				message="Start processing file:${in.headers.CamelFileNameConsumed}" />
+			<choice>
+				<when>
+					<simple>${headers.CamelFileNameConsumed} contains '1' </simple>
+					<split streaming="true">
+						<tokenize token="\n" group="1" />
+						<filter>
+							<simple>${header.CamelSplitIndex} > 0</simple>
+							<to uri="file:src/main/resources/outputFolder2" />
+						</filter>
+					</split>
+				</when>
+				<otherwise>
+					<split streaming="true">
+						<tokenize token="\n" group="1" />
+						<filter>
+							<simple>${header.CamelSplitIndex} > 0</simple>
+							<log message="process:${header.CamelSplitIndex}" />
+							<to uri="file:src/main/resources/outputFolder" />
+						</filter>
+					</split>
+				</otherwise> 
+			</choice>
+
+			<log
+				message="End processing file:${in.headers.CamelFileNameConsumed}" />
+		</route>
+
+
+
+		<!-- <jmxAgent id="agent" disabled="false"/> <routeBuilder ref="routeBuilder" 
+			/> <redeliveryPolicyProfile id="testRedeliveryPolicyProfile" retryAttemptedLogLevel="WARN" 
+			maximumRedeliveries="5" redeliveryDelay="5" /> -->
+
+
+
 	</camelContext>
+
 </beans>
