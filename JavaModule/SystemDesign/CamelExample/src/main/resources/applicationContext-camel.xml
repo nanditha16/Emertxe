@@ -9,8 +9,6 @@
 	<!-- -->
 	<bean id="routeBuilder" class="route.SimpleRouteBuilder" />
 
-
-
 	<camelContext
 		xmlns="http://camel.apache.org/schema/spring">
 
